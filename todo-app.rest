@@ -1,0 +1,40 @@
+###
+GET http://localhost:3000
+###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser@gmail.com",
+  "password": "testpassword"
+}
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser@gmail.com",
+  "password": "testpassword"
+}
+###
+GET http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzkwMTkzOTg1LCJleHAiOjE3OTAyODAzODV9.4M5f1K_RXqLB_dVzqJimOA_bW8lh7OOkk_fPzUS0mEI
+###
+POST http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzkwMTkzOTg1LCJleHAiOjE3OTAyODAzODV9.4M5f1K_RXqLB_dVzqJimOA_bW8lh7OOkk_fPzUS0mEI
+Content-Type: application/json
+
+{
+  "task": "finish coding the project"
+}
+###
+PUT http://localhost:3000/todos/2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzkwMTkzOTg1LCJleHAiOjE3OTAyODAzODV9.4M5f1K_RXqLB_dVzqJimOA_bW8lh7OOkk_fPzUS0mEI
+Content-Type: application/json
+
+{
+  "completed" : 1
+}
+###
+DELETE http://localhost:3000/todos/2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzkwMTkzOTg1LCJleHAiOjE3OTAyODAzODV9.4M5f1K_RXqLB_dVzqJimOA_bW8lh7OOkk_fPzUS0mEI

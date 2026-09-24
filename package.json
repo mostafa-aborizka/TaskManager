@@ -1,0 +1,20 @@
+{
+  "name": "taskmanager",
+  "version": "1.0.0",
+  "description": " A full stack task manager application built with Node.js, Express and SQLite database. It allows users to create, read, update, and delete tasks, as well as manage user authentication and authorization with JWT.",
+  "main": "index.js",
+  
+  "scripts": {
+    "dev": "node --watch --env-file=.env ./src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
