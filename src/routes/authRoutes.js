@@ -1,36 +1,48 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import  db  from "../db.js";
+import prisma from "../prismaClient.js";
 
 const router = express.Router();
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     try {
-        const insertUser = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
-        const result = insertUser.run(username, hashedPassword)
-        const defaultTask = "Hello :) add your first task!"
-        const insertTask = db.prepare("INSERT INTO tasks (user_id, task) VALUES (?, ?)")
-        insertTask.run(result.lastInsertRowid, defaultTask)
+        const user = await prisma.user.create({
+            data: {
+                username,
+                password: hashedPassword,
+                todos: {
+                    create: {
+                        task: "Hello :) add your first task!"
+                    }
+                }
+            }
+        })
         
-        const token = jwt.sign({ id : result.lastInsertRowid }, process.env.JWT_SECRET, { expiresIn: '24h' })
+        const token = jwt.sign({ id : user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
         res.json({ token });
     }
     catch(err){
+        if (err.code === "P2002") {
+            return res.status(409).send({ message: "Username already exists" });
+        }
+
         console.log(err.message);
         res.sendStatus(503);
     }
 
 })
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
     const { username, password } = req.body
-    const getUser = db.prepare("SELECT * FROM users WHERE username = ?")
-    const user = getUser.get(username)
-
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username
+        } 
+    })
     if (!user) {
         return res.status(404).send({ message: "User not found" });
     }

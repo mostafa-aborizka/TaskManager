@@ -1,9 +1,8 @@
 {
-  "name": "taskmanager",
+  "name": "task_manager",
   "version": "1.0.0",
-  "description": " A full stack task manager application built with Node.js, Express and SQLite database. It allows users to create, read, update, and delete tasks, as well as manage user authentication and authorization with JWT.",
+  "description": "A dockerized full stack task manager application built with Node.js, Express, PostgreSQL database, Prisma ORM and JWT Authentication.",
   "main": "index.js",
-  
   "scripts": {
     "dev": "node --watch --env-file=.env ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,8 +12,17 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.0",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.8",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0",
+    "prisma": "^7.10.0"
+  },
+  "allowScripts": {
+    "prisma@7.10.0": true,
+    "@prisma/engines@7.10.0": true
   }
 }
