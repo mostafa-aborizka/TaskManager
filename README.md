@@ -119,6 +119,47 @@ npm run dev
 
 For local development, PostgreSQL must be running and `DATABASE_URL` must point to it.
 
+## Deploy with Snap Deploy and Neon
+
+Production uses [Neon](https://neon.tech) for PostgreSQL and [Snap Deploy](https://snapdeploy.dev) for the application container.
+
+1. Create a Neon PostgreSQL project and copy its connection string. It should include `sslmode=require`:
+
+   ```text
+   postgresql://user:password@host.neon.tech/neondb?sslmode=require
+   ```
+
+2. In Snap Deploy, deploy this repository as a container from the `Dockerfile`.
+3. Configure the container port as `5003`, unless Snap Deploy provides a different `PORT` automatically.
+4. Add these environment variables in Snap Deploy:
+
+   ```text
+   DATABASE_URL=<your Neon connection string>
+   JWT_SECRET=<a long random secret>
+   NODE_ENV=production
+   ```
+
+   Mark `DATABASE_URL` and `JWT_SECRET` as secrets. Do not commit them or add them to the Dockerfile.
+
+5. Deploy the container. The image generates the Prisma client during its build, then applies checked-in migrations and starts the server when it runs.
+
+The production container runs:
+
+```text
+npx prisma migrate deploy && node ./src/server.js
+```
+
+To deploy a schema change, create a migration locally, commit it, and push it to the deployment branch:
+
+```bash
+npx prisma migrate dev --name describe-your-change
+git add prisma/schema.prisma prisma/migrations
+git commit -m "Update database schema"
+git push
+```
+
+Snap Deploy applies the migration with `prisma migrate deploy` during the next container startup. Do not use `prisma migrate dev` against the production database.
+
 ## Database migrations
 
 Create and apply a development migration after changing `prisma/schema.prisma`:
