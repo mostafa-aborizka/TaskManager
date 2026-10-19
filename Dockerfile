@@ -8,6 +8,8 @@ RUN npm ci --no-audit --no-fund
 
 COPY . .
 
+RUN npx prisma generate
+
 EXPOSE 5003
 
-CMD ["node", "./src/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node ./src/server.js"]
